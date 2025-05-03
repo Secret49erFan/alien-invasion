@@ -83,6 +83,7 @@ class AlienInvasion:
 
         # Create a new fleet and center the ship.
         self._create_fleet()
+        self.ship.center_ship()
                 
     
     def _check_keydown_events(self, event):
