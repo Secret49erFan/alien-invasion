@@ -75,7 +75,10 @@ class AlienInvasion:
         if button_clicked and not self.game_active:
             # Reset the game settings.
             self.settings.initialize_dynamic_settings()
+            
+            # Reset the game statistics.
             self.stats.reset_stats()
+            self.sb.prep_score()
             self.game_active = True
 
             # Hide the mouse cursor.
@@ -133,14 +136,20 @@ class AlienInvasion:
                                                 True,
                                                 True)
         if collisions:
-            self.stats.score += self.settings.alien_points
-            self.sb.prep_score()
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points*len(aliens)
+                self.sb.prep_score()
+                self.sb.check_high_score()
         
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # Increase level.
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _ship_hit(self):
         '''Respond to the ship being hit by an alien.'''
